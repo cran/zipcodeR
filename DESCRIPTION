@@ -1,6 +1,6 @@
 Package: zipcodeR
 Title: Data & Functions for Working with US ZIP Codes
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: 
     person(given = "Gavin",
            family = "Rozzi",
@@ -17,13 +17,14 @@ BugReports: https://github.com/gavinrozzi/zipcodeR/issues/
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
-Imports: rlang
-Depends: R (>= 3.5.0), dplyr, stringr
-Suggests: knitr, rmarkdown, markdown, readr, tidycensus
+Imports: rlang, stringr, raster, udunits2, tidycensus, tidyr, dplyr
+Depends: R (>= 3.5.0)
+Suggests: knitr, rmarkdown, markdown, readr, testthat (>= 3.0.0), covr
 VignetteBuilder: knitr, rmarkdown
+Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2020-12-12 21:31:32 UTC; shore
+Packaged: 2021-04-15 04:01:33 UTC; gavinrozzi
 Author: Gavin Rozzi [aut, cre] (<https://orcid.org/0000-0002-9969-8175>)
 Maintainer: Gavin Rozzi <gr@gavinrozzi.com>
 Repository: CRAN
-Date/Publication: 2020-12-13 00:10:02 UTC
+Date/Publication: 2021-04-15 05:40:02 UTC
