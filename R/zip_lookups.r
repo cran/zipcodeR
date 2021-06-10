@@ -102,7 +102,7 @@ reverse_zipcode <- function(zip_code) {
     dplyr::filter(.data$zipcode %in% zip_code)
 
   # Iterate over input and insert NA rows for those with no match
-  for (i in 1:length(zip_code)) {
+  for (i in seq_along(zip_code)) {
     if (zip_code[i] %in% zip_code_db$zipcode == FALSE) {
       warning(paste("No data found for ZIP code", zip_code[i]))
       zip_code_data <- zip_code_data %>%
@@ -347,10 +347,10 @@ geocode_zip <- function(zip_code) {
 #' @return a tibble containing the ZIP code(s) within the provided radius and distance from the provided coordinates in miles
 #'
 #' @examples
-#'
-#' \dontrun{search_radius(39.9, -74.3, 10)}
+#' \dontrun{
+#' search_radius(39.9, -74.3, 10)
+#' }
 #' @importFrom raster pointDistance
-#' @importFrom udunits2 ud.convert
 #' @export
 search_radius <- function(lat, lng, radius = 1) {
 
@@ -360,12 +360,12 @@ search_radius <- function(lat, lng, radius = 1) {
     dplyr::filter(lat != "NA")
 
   # Calculate the distance between all points and the provided coordinate pair
-  for (i in 1:nrow(zip_data)) {
+  for (i in seq_len(nrow(zip_data))) {
     zip_data$distance[i] <- raster::pointDistance(c(lng, lat), c(zip_data$lng[i], zip_data$lat[i]), lonlat = TRUE)
   }
 
   # Convert meters to miles for distance measurement
-  zip_data$distance <- udunits2::ud.convert(zip_data$distance, "m", "mi")
+  zip_data$distance <- zip_data$distance * 0.000621371
 
   # Get matching ZIP codes within specified search radius
   result <- zip_data %>%

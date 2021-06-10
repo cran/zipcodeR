@@ -106,9 +106,21 @@ test_that("reverse_zipcode() warns on invalid ZIP code input", {
   expect_warning(reverse_zipcode("08999"))
 })
 
+test_that("reverse_zipcode() returns NA data on invalid ZIP code input", {
+  result <- suppressWarnings(reverse_zipcode("08999"))
+  expect_equal(result$zipcode_type, NA_character_)
+})
+
 test_that("reverse_zipcode() errors on ZIP code input with invalid number of characters", {
   expect_error(reverse_zipcode("099999"))
 })
+
+test_that("reverse_zipcode() errors on empty input", {
+  expect_error(reverse_zipcode())
+})
+
+
+
 
 
 
@@ -196,6 +208,19 @@ test_that("search_city() filters results to a single city when given single city
   expect_equal(length(result), 1)
 })
 
+test_that("search_city() outputs proper structure data", {
+  result <- class(search_city("Spring Lake", "NJ"))[1]
+  expect_equal(result, "tbl_df")
+})
+
+test_that("search_city() errors on invalid city name", {
+  expect_error(search_city("anytown", "NJ"))
+})
+
+
+
+
+
 ###############
 # search_tz() #
 ###############
@@ -203,4 +228,57 @@ test_that("search_city() filters results to a single city when given single city
 test_that("search_tz() outputs proper structure data", {
   result <- class(search_tz("Mountain"))[1]
   expect_equal(result, "tbl_df")
+})
+
+test_that("search_tz() errors on invalid timezone input", {
+  expect_error(search_tz("Western"))
+})
+
+###################
+# search_radius() #
+###################
+
+test_that("search_radius() outputs proper structure data", {
+  result <- class(search_radius(39.9, -74.3, 10))[1]
+  expect_equal(result, "tbl_df")
+})
+
+test_that("search_radius() returns a single ZIP code when centroid of ZIP is submitted", {
+  result <- search_radius(39.9, -74.3, 1)
+  expect_equal(nrow(result), 1)
+})
+
+test_that("search_radius() output is consistent with zip_distance()", {
+  result <- search_radius(39.9, -74.3, 10)
+  expect_equal(
+    zip_distance(result$zipcode[1], result$zipcode[2]),
+    round(result$distance[2], digits = 2)
+  )
+})
+
+################
+# geocode_zip()#
+################
+
+test_that("geocode_zip() outputs proper structure data", {
+  result <- class(geocode_zip("08731"))[1]
+  expect_equal(result, "tbl_df")
+})
+
+test_that("geocode_zip() errors on single invalid ZIP", {
+  expect_error(geocode_zip("08999"))
+})
+
+
+test_that("geocode_zip() outputs proper structure data", {
+  result <- class(geocode_zip("08731"))[1]
+  expect_equal(result, "tbl_df")
+})
+##################
+# normalize_zip()#
+##################
+test_that("normalize_zip() fixes missing leading zeroes ", {
+  # test with a zipcode missing leading zero
+  result <- normalize_zip("8731")
+  expect_equal(result, "08731")
 })
